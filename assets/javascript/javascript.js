@@ -5,39 +5,40 @@ var score = 0;
 var interval;
 var i = 0;
 var correct = false;
+var quizOver = false;
 // create an array of questions
 var quiz = [
     {
     question: "Which of the following is an instrument?",
     answers: {
-        right: "Mayonaise",
-        wrong: ["Pickles", "Trumpophone", "Horseraddish"]
+        right: "A) Mayonaise",
+        wrong: ["B) Pickles", "C) Trumpophone", "D) Horseraddish"]
     }
 },
 {
     question: "On a scale of ice cream sundae, to gluten free pizza crust, how delicious was your meal?",
     answers: {
-        right: "Yes",
-        wrong: ["4 out of 5", "About 15 Brapples", "I'm sorry, that scale makes no sense."]
+        right: "A) Yes",
+        wrong: ["B) 4 out of 5", "C) About 15 Brapples", "D) I'm sorry, that scale makes no sense."]
     }
 },
 {
     question: "Have you ever been so far as to even do look more like?",
     answers: {
-        right: "Bruh...I've been even half as many to do more was over yonder.",
-        wrong: ["I haven't as more so even done as many yet.", "Even if doing more like somewhat was possible, I wouldn't go that even as to be like.", "Oww....my brain hurt reading this and I think I lost a few brain cells in the process."],
+        right: "A) Bruh...I've been even half as many to do more was over yonder.",
+        wrong: ["B) I haven't as more so even done as many yet.", "C) Even if doing more like somewhat was possible, I wouldn't go that even as to be like.", "D) Oww....my brain hurt reading this and I think I lost a few brain cells in the process."],
     }},
     {
     question: "What is the past tense of Yeet?",
     answers: {
-        right: "Yeeted",
-        wrong: ["Yotted", "Yottled", "Yeeten"]
+        right: "A) Yeeted",
+        wrong: ["B) Yotted", "C) Yottled", "D) Yeeten"]
     }},
     {
         question: "Which of the following is not one of the main food groups?",
     answers: {
-        right: "Vegetables",
-        wrong: ["Candy", "Candy Canes", "Candy Corn"]
+        right: "A) Vegetables",
+        wrong: ["B) Candy", "C) Candy Canes", "D) Candy Corn"]
     }
     }
 ]
@@ -53,6 +54,7 @@ function createInterval(int) {
         $("#time-left").text("Time left: " + time);
         if (time === 0) {
             changeQuestion();
+            
         }
     },
         1000)
@@ -62,21 +64,30 @@ function changeQuestion() {
 console.log(this);
 
     if(i=== quiz.length-1){
-        $("#question").text("Your score is " +  score + " out of 4");
+        quizOver=true;
+        clearInterval(setInterval);
+        $("#time-left").text("");
+        $("#question").text("Your score is " +  score + " out of 5");
+        $("#answer1").text("");
+        $("#answer2").text("");
+        $("#answer3").text("");
+        $("#answer4").text("");
     }
 else{
     if (correct === true) {
         console.log("going to next question");
         i++
         right();   
+        time= 30;
      }
     else {
-
+time=3
         wrong();
 
     }
 }
-    clearInterval(30);
+    clearInterval(interval);
+    createInterval();
 }
 
 //create a function for the for the losing screen
@@ -90,20 +101,21 @@ function wrong() {
     $("#answer4").text("");
     clearInterval();
     setTimeout(changeQuestion, 3000);
-    createInterval(3);
 }
 
 //create a function for the correct answer
 
 function right() {
-
-    score++;
+    correct = false;
     $("#question").text(quiz[i].question);
     $("#answer1").text(quiz[i].answers.right);
     $("#answer2").text(quiz[i].answers.wrong[0]);
     $("#answer3").text(quiz[i].answers.wrong[1]);
     $("#answer4").text(quiz[i].answers.wrong[2]);
     clearInterval(interval);
+    setTimeout(changeQuestion, 30000)
+    time=30;
+    console.log(score);
   
 
 };
@@ -111,6 +123,7 @@ $("#answer1").on("click", function(){
     var answ1 = $(this).text();
     if(quiz[i].answers.right === answ1){
         correct = true;
+        score++;
     }
     else{correct = false;}
     console.log(answ1);
@@ -149,11 +162,10 @@ $("#answer4").on("click", function(){
 
 createInterval(30)
 $("#question").text(quiz[i].question);
-    $("#answer1").text(quiz[i].answers.right);
     $("#answer2").text(quiz[i].answers.wrong[0]);
     $("#answer3").text(quiz[i].answers.wrong[1]);
+    $("#answer1").text(quiz[i].answers.right);
     $("#answer4").text(quiz[i].answers.wrong[2]);
-
     // $("#answer1").on("click", function () {
     //              right();
     //      })
